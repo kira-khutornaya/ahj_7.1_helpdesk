@@ -21,6 +21,7 @@ app.use(cors({
   origin: '*',
   credentials: true,
   allowMethods: ['GET', 'POST', 'PUT', 'DELETE'],
+  'Access-Control-Allow-Origin': true
 }));
 
 router.get('/helpdesk', async (ctx) => {
