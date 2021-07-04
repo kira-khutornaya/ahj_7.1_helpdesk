@@ -1,4 +1,4 @@
-module.exports = class HelpDesk {
+module.exports = class Tickets {
   constructor() {
     this.tickets = [
       {
@@ -6,21 +6,21 @@ module.exports = class HelpDesk {
         title: 'Поменять краску в принтере, ком. 404',
         description: 'Чёрно-белый принтер Canon,  инвентарный номер - 564652134686100',
         status: false,
-        created: 1624896752320,
+        created: 1622897753345,
       },
       {
         id: 2,
         title: 'Переустановить Windows, ПК-Hall24',
-        description: '',
+        description: 'Описания нет',
         status: false,
-        created: 1624896753345,
+        created: 1624696765577,
       },
       {
         id: 3,
         title: 'Установить обновление КВ-XXX',
         description: 'Вышло критическое обновление, нужно поставить обновления в следующем приоритете: 1) сервера, 2) рабочие станции',
         status: true,
-        created: 1624896765577,
+        created: 1624896752320,
       },
     ];
   }
@@ -39,19 +39,20 @@ module.exports = class HelpDesk {
 
   createTicket(title, description) {
     const ticketId = this.tickets.length ? this.tickets[this.tickets.length - 1].id + 1 : 1;
-
-    this.tickets.push({
-      id: ticketId,
-      title,
-      description,
-      status: false,
-      created: Date.now(),
-    });
+    this.tickets.push(
+      {
+        id: ticketId,
+        title,
+        description,
+        status: false,
+        created: Date.now(),
+      },
+    );
   }
 
   removeTicket(id) {
-    const index = this.tickets.findIndex((el) => el.id === id);
-    this.tickets.splice(index, 1);
+    const ticketIndex = this.tickets.findIndex((el) => el.id === id);
+    this.tickets.splice(ticketIndex, 1);
   }
 
   changeStatus(id) {

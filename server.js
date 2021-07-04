@@ -6,8 +6,6 @@ const cors = require('koa2-cors');
 const Helpdesk = require('./Helpdesk');
 
 const app = new Koa();
-const router = new Router();
-const helpdesk = new Helpdesk();
 
 app.use(koaBody({
   urlencoded: true,
@@ -21,8 +19,11 @@ app.use(cors({
   origin: '*',
   credentials: true,
   allowMethods: ['GET', 'POST', 'PUT', 'DELETE'],
-  'Access-Control-Allow-Origin': true
+  allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
 }));
+
+const router = new Router();
+const helpdesk = new Helpdesk();
 
 router.get('/helpdesk', async (ctx) => {
   const { method } = ctx.request.query;
@@ -37,28 +38,32 @@ router.get('/helpdesk', async (ctx) => {
 
 router.post('/helpdesk', async (ctx) => {
   const { method } = ctx.request.query;
+
   if (method === 'createTicket') {
     const { title, description } = ctx.request.body;
-    ctx.response.body = helpdesk.createTicket(title, description);
+    helpdesk.createTicket(title, description);
     ctx.response.status = 204;
   }
 });
 
 router.put('/helpdesk/:id', async (ctx) => {
-  const id = +(ctx.params.id);
+  const currentId = +(ctx.params.id);
   const { title, description } = ctx.request.body;
-  if (!title || !description) helpdesk.changeStatus(id);
-  else helpdesk.editTicket(id, title, description);
+
+  if (!title || !description) helpdesk.changeStatus(currentId);
+  else helpdesk.editTicket(currentId, title, description);
+
   ctx.response.status = 204;
 });
 
 router.delete('/helpdesk/:id', async (ctx) => {
-  const id = +(ctx.params.id);
-  helpdesk.removeTicket(id);
+  const currentId = +(ctx.params.id);
+  helpdesk.removeTicket(currentId);
+
   ctx.response.status = 204;
 });
 
-app.use(koaBody()).use(router.routes()).use(router.allowedMethods());
+app.use(router.routes()).use(router.allowedMethods());
 
-const port = process.env.PORT || 7070;
+const port = process.env.PORT || 8888;
 http.createServer(app.callback()).listen(port, () => console.log('server started...'));
